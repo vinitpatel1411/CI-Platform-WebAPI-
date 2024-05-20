@@ -9,5 +9,7 @@ namespace WebAPI.Repositories.UserRepositories
         bool IsUserExist(string email);
         public User login(loginDTO userLogin);
         public bool ForgotPassword(string email);
+        public User UpdateUserData(User user);
+        public bool isEmployeeIdUnique(string employeeId);
     }
 }

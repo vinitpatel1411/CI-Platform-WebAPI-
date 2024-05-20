@@ -10,6 +10,12 @@ namespace WebAPI.Mapper
         {
             CreateMap<userRegisterDTO, User>().ReverseMap();
             CreateMap<User,userDTO>().ReverseMap();
+           
+            CreateMap<cityDTO, City>().ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.id));
+            CreateMap<City, cityDTO>().ForMember(dest => dest.id, opt => opt.MapFrom(src => src.CityId));
+
+            CreateMap<countryDTO, Country>().ForMember(dest => dest.CountryId, opt => opt.MapFrom(src => src.id));
+            CreateMap<Country, countryDTO>().ForMember(dest => dest.id, opt => opt.MapFrom(src => src.CountryId));
         }
     }
 }

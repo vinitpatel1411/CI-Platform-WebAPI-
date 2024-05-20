@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Generators;
 using WebAPI.Data;
 using WebAPI.Data.DTO;
+using WebAPI.Repositories.CommonRepositories;
 
 namespace WebAPI.Repositories.UserRepositories
 {
@@ -12,11 +13,13 @@ namespace WebAPI.Repositories.UserRepositories
     {
         private readonly DefaultContext _context;
         private readonly IMapper _mapper;
+        private readonly ICommonRepository _commonRepository;
 
-        public UserRepository(DefaultContext context, IMapper mapper)
+        public UserRepository(DefaultContext context, IMapper mapper, ICommonRepository commonRepository)
         {
             _context = context;
-            _mapper = mapper;    
+            _mapper = mapper;
+            _commonRepository = commonRepository;
         }
         public bool CreateUser(userRegisterDTO userRegisterDTO)
         {
@@ -93,6 +96,23 @@ namespace WebAPI.Repositories.UserRepositories
             {
                 return false;
             }
+        }
+
+        public User UpdateUserData(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            return _context.Users.Where(x => x.Email == user.Email).FirstOrDefault();
+        }
+
+        public bool isEmployeeIdUnique(string employeeId)
+        {
+            var user = _context.Users.Where(x=>x.Employeeid == employeeId).FirstOrDefault();
+            if (user != null)
+                return false;
+            else
+                return true;
         }
     }
 }

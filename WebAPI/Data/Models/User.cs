@@ -35,6 +35,8 @@ namespace Data.Models
         public DateTime? Updatedate { get; set; }
         public DateTime? Deletedate { get; set; }
         public string? Role { get; set; }
+        public string? Availablity { get; set; }
+        public string? Manager { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<FavouriteMission> FavouriteMissions { get; set; }

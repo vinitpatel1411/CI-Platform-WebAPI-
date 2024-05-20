@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Mapper;
+using WebAPI.Repositories.CommonRepositories;
 using WebAPI.Repositories.MissionRepositories;
 using WebAPI.Repositories.UserRepositories;
+using WebAPI.Services.CommonServices;
 using WebAPI.Services.MissionServices;
 using WebAPI.Services.UserServices;
 
@@ -28,6 +30,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IMissionService, MissionService>();
 builder.Services.AddScoped<IMissionRepository,MissionRepository>();
+
+builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddScoped<ICommonRepository, CommonRepository>();
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

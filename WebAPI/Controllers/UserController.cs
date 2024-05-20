@@ -58,5 +58,25 @@ namespace WebAPI.Controllers
                 ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.RESET_PASSWORD_EMAIL_SUCCESS }))
                 : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.USER_NOT_FOUND }));
         }
+
+        [HttpPost]
+        [Route("updateUser")]
+        public ActionResult UpdateUserData(userDTO userDTO)
+        {
+            var updatedUserDTO = _userService.UpdateUserData(userDTO);
+
+            return updatedUserDTO != null
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.UPDATE_USER_DATA_SUCCESS }, updatedUserDTO))
+                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
+
+        [HttpGet]
+        [Route("isEmployeeIdUnique")]
+        public ActionResult isEmployeeIdUnique(string employeeId)
+        {
+            return _userService.isEmployeeIdUnique(employeeId) 
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }))
+               : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.EMPLOYEEID_IS_NOT_UNIQUE }));
+        }
     }
 }

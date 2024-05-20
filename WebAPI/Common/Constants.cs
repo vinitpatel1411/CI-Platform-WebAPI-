@@ -8,5 +8,7 @@
         public static string RESET_PASSWORD_SUCCESS = "Password reset successfully!";
         public static string ERROR = "Oops, Something went wrong. Please try again.";
         public static string NO_DATA = "No Data Found!";
+        public static string UPDATE_USER_DATA_SUCCESS = "Sucessfully Updated User Data";
+        public static string EMPLOYEEID_IS_NOT_UNIQUE = "Employee Id is not unique";
     }
 }
