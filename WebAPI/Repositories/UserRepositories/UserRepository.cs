@@ -100,6 +100,7 @@ namespace WebAPI.Repositories.UserRepositories
 
         public User UpdateUserData(User user)
         {
+            user.Updatedate = DateTime.Now;
             _context.Users.Update(user);
             _context.SaveChanges();
 
@@ -113,6 +114,35 @@ namespace WebAPI.Repositories.UserRepositories
                 return false;
             else
                 return true;
+        }
+
+        public bool checkOldPassword(checkOldPasswordDTO model)
+        {
+            var user = _context.Users.Where(x => x.Email == model.email).FirstOrDefault();
+            //if(user != null)
+            //{
+            //    verified = BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
+            //    if(verified) 
+            //        return true;
+            //}
+            //else
+            //    return false;
+            return user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
+        }
+
+        public string changePassword(changePasswordDTO model)
+        {
+            var user = _context.Users.Where(x=>x.Email == model.email).FirstOrDefault();
+            if(user!=null)
+            {
+                string encryptedPassword = BCrypt.Net.BCrypt.HashPassword(model.newPassword);
+                user.Password = encryptedPassword;
+                user.Updatedate= DateTime.Now;
+                _context.SaveChanges();
+                return encryptedPassword;
+            }
+            else
+                return null;
         }
     }
 }

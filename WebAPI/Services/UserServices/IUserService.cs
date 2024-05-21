@@ -10,5 +10,7 @@ namespace WebAPI.Services.UserServices
         public bool ForgotPassword(string email);
         public userDTO UpdateUserData(userDTO userDTO);
         public bool isEmployeeIdUnique(string employeeId);
+        public bool checkOldPassword(checkOldPasswordDTO model);
+        public string changePassword(changePasswordDTO model);
     }
 }

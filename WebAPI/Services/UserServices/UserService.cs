@@ -74,5 +74,15 @@ namespace WebAPI.Services.UserServices
         {
             return _userRepository.isEmployeeIdUnique(employeeId);
         }
+
+        public bool checkOldPassword(checkOldPasswordDTO model)
+        {
+            return _userRepository.checkOldPassword(model);
+        }
+
+        public string changePassword(changePasswordDTO model) 
+        {
+            return _userRepository.changePassword(model);
+        }
     }
 }

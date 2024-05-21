@@ -10,5 +10,6 @@
         public static string NO_DATA = "No Data Found!";
         public static string UPDATE_USER_DATA_SUCCESS = "Sucessfully Updated User Data";
         public static string EMPLOYEEID_IS_NOT_UNIQUE = "Employee Id is not unique";
+        public static string OLD_PASSWORD_NOT_CORRECT = "Your Old Password is not Correct";
     }
 }

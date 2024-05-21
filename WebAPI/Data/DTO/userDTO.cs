@@ -25,9 +25,9 @@ namespace WebAPI.Data.DTO
         [StringLength(50)]
         public string? Department { get; set; }
         public long? CityId { get; set; }
-        public string City { get; set; }
+        public string? City { get; set; }
         public long? CountryId { get; set; }
-        public string Country { get; set; }
+        public string? Country { get; set; }
         public string? ProfileText { get; set; }
         [StringLength(255)]
         public string? LinkedInUrl { get; set; }

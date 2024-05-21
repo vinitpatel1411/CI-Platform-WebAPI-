@@ -78,5 +78,24 @@ namespace WebAPI.Controllers
                 ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }))
                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.EMPLOYEEID_IS_NOT_UNIQUE }));
         }
+
+        [HttpPost]
+        [Route("checkOldPassword")]
+        public ActionResult checkOldPassword(checkOldPasswordDTO checkOldPassword)
+        {
+            return _userService.checkOldPassword(checkOldPassword)
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }))
+               : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.OLD_PASSWORD_NOT_CORRECT }));
+        }
+
+        [HttpPost]
+        [Route("changePassword")]
+        public ActionResult changePassword(changePasswordDTO changePassword) 
+        {
+            string updatedPassword = _userService.changePassword(changePassword);
+            return updatedPassword != null
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, updatedPassword))
+               : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
     }
 }
