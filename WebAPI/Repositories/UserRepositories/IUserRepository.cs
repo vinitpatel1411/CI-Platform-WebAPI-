@@ -13,5 +13,10 @@ namespace WebAPI.Repositories.UserRepositories
         public bool isEmployeeIdUnique(string employeeId);
         public bool checkOldPassword(checkOldPasswordDTO model);
         public string changePassword(changePasswordDTO model);
+        public User GetUserDetails(string email);
+        public string GetUserRole(string email);
+        public List<User> GetUserDetails();
+        public User UpdateUserStatus(userDTO userDTO);
+        public void DeleteUser(userDTO userDTO);
     }
 }

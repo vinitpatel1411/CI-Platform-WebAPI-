@@ -97,5 +97,60 @@ namespace WebAPI.Controllers
                 ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, updatedPassword))
                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
         }
+
+        [HttpGet]
+        [Route("userDetails/{email}")]
+        public ActionResult GetUserDetails(string email)
+        {
+            var user = _userService.GetUserDetails(email);
+            return user != null
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, user))
+                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
+
+        [HttpGet]
+        [Route("getUserRole/{email}")]
+        public ActionResult GetUserRole(string email)
+        {
+            var userRole = _userService.GetUserRole(email);
+            return userRole != null
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, userRole))
+                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
+
+        [HttpGet]
+        [Route("getUsers")]
+        public ActionResult GetUsers()
+        {
+            var users = _userService.GetUsers();
+            return users != null
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, users))
+                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
+
+        [HttpPost]
+        [Route("updateUserStatus")]
+        public ActionResult UpdateUserStatus(userDTO userDTO)
+        {
+            var user = _userService.UpdateUserStatus(userDTO);
+            return user != null
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, user))
+                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
+
+        [HttpDelete]
+        [Route("deleteUser")]
+        public ActionResult DeleteUser(userDTO userDTO) 
+        {
+            try
+            {
+                _userService.DeleteUser(userDTO);
+                return this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }));
+            }
+            catch(Exception ex)
+            {
+                return this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+            }
+        }
     }
 }

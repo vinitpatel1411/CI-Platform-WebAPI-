@@ -2,6 +2,7 @@
 using Data.Context;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using WebAPI.Data;
 using WebAPI.Data.DTO;
@@ -29,6 +30,8 @@ namespace WebAPI.Repositories.UserRepositories
                 user.Createdate = DateTime.Now.ToUniversalTime();
                 string encryptedPassword = BCrypt.Net.BCrypt.HashPassword(userRegisterDTO.Password);
                 user.Password = encryptedPassword;
+                user.Role = "user";
+                user.Status = 1;
 
                 _context.Users.Add(user);
                 _context.SaveChanges();
@@ -143,6 +146,52 @@ namespace WebAPI.Repositories.UserRepositories
             }
             else
                 return null;
+        }
+
+        public User GetUserDetails(string email)
+        {
+            var user = _context.Users.Where(u => u.Email == email).FirstOrDefault();
+            if (user != null)
+                return user;
+            return null;
+        }
+
+        public string GetUserRole(string email)
+        {
+            var user = _context.Users.Where(u => u.Email == email).FirstOrDefault();
+            if (user != null)
+                return user.Role;
+            return "";
+        }
+
+        public List<User> GetUserDetails()
+        {
+            var users = _context.Users.Where(u=>u.Role == "user").ToList();
+            return users;
+        }
+
+        public User UpdateUserStatus(userDTO userDTO)
+        {
+            var user = _context.Users.Find(Convert.ToInt32(userDTO.Id));
+            if (user != null) 
+            {
+                user.Status = userDTO.Status ? 1 : 0;
+                _context.Users.Update(user);
+                _context.SaveChanges();
+            }
+            return user;
+        }
+
+        public void DeleteUser(userDTO userDTO) 
+        {
+            var user = _context.Users.Find(Convert.ToInt32(userDTO.Id));
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+            }
+            else
+                throw new Exception("No User Found");
         }
     }
 }

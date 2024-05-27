@@ -39,5 +39,6 @@ namespace WebAPI.Data.DTO
         public DateTime? DeletedAt { get; set; }
         public string? Availablity { get; set; }
         public string? manager { get; set; }
+        public string? Role { get; set; }
     }
 }

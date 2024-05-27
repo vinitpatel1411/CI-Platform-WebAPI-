@@ -84,5 +84,72 @@ namespace WebAPI.Services.UserServices
         {
             return _userRepository.changePassword(model);
         }
+
+        public userDTO GetUserDetails(string email)
+        {
+            var user = _userRepository.GetUserDetails(email);
+            userDTO userDTO = _mapper.Map<userDTO>(user);
+
+            if (userDTO != null)
+            {
+                var city = _commonRepository.GetCityFromId(userDTO.CityId ?? 0);
+                if (city != null)
+                    userDTO.City = String.IsNullOrEmpty(city.Name) ? string.Empty : city.Name;
+
+                var country = _commonRepository.GetCountryFromId(userDTO.CountryId ?? 0);
+                if (country != null)
+                    userDTO.Country = String.IsNullOrEmpty(country.Name) ? string.Empty : country.Name;
+
+                return userDTO;
+            }
+            else
+                return userDTO;
+        }
+
+        public string GetUserRole(string email)
+        {
+            return _userRepository.GetUserRole(email);
+        }
+
+        public List<userDTO> GetUsers()
+        {
+            List<User> users = _userRepository.GetUserDetails();
+            List<userDTO> userDTOs = _mapper.Map<List<User>,List<userDTO>>(users);
+
+            foreach(var userDTO in userDTOs)
+            {
+                var city = _commonRepository.GetCityFromId(userDTO.CityId ?? 0);
+                if (city != null)
+                    userDTO.City = String.IsNullOrEmpty(city.Name) ? string.Empty : city.Name;
+
+                var country = _commonRepository.GetCountryFromId(userDTO.CountryId ?? 0);
+                if (country != null)
+                    userDTO.Country = String.IsNullOrEmpty(country.Name) ? string.Empty : country.Name;
+            }
+
+            return userDTOs;
+        }
+
+        public userDTO UpdateUserStatus(userDTO userDTO)
+        {
+            var user = _userRepository.UpdateUserStatus(userDTO);
+            var updatedUserDTO = _mapper.Map<userDTO>(user);
+            if (updatedUserDTO != null) 
+            {
+                var city = _commonRepository.GetCityFromId(updatedUserDTO.CityId ?? 0);
+                if (city != null)
+                    updatedUserDTO.City = String.IsNullOrEmpty(city.Name) ? string.Empty : city.Name;
+
+                var country = _commonRepository.GetCountryFromId(updatedUserDTO.CountryId ?? 0);
+                if (country != null)
+                    updatedUserDTO.Country = String.IsNullOrEmpty(country.Name) ? string.Empty : country.Name;
+            }
+            return updatedUserDTO;
+        }
+
+        public void DeleteUser(userDTO userDTO)
+        {
+            _userRepository.DeleteUser(userDTO);
+        }
     }
 }

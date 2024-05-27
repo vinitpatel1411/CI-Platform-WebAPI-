@@ -12,5 +12,10 @@ namespace WebAPI.Services.UserServices
         public bool isEmployeeIdUnique(string employeeId);
         public bool checkOldPassword(checkOldPasswordDTO model);
         public string changePassword(changePasswordDTO model);
+        public userDTO GetUserDetails(string email);
+        public string GetUserRole(string email);
+        public List<userDTO> GetUsers();
+        public userDTO UpdateUserStatus(userDTO userDTO);
+        public void DeleteUser(userDTO userDTO);
     }
 }
