@@ -26,13 +26,16 @@ namespace Data.Models
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public DateTime? RegistrationDeadlineDate { get; set; }
         public string? MissionType { get; set; }
         public bool? Status { get; set; }
-        public string? OrganizationName { get; set; }
+        public string? Organization { get; set; }
         public string? Availability { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
+
+        public long? TotalSeats { get; set; }
 
         public virtual City City { get; set; } = null!;
         public virtual Country Country { get; set; } = null!;

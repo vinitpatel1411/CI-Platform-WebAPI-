@@ -1,5 +1,6 @@
 ﻿using Data.Models;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Data.Models;
 
 namespace Data.Context
 {
@@ -52,6 +53,8 @@ namespace Data.Context
         public virtual DbSet<StoryInvite> StoryInvites { get; set; } = null!;
         public virtual DbSet<StoryMedium> StoryMedia { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+
+        public virtual DbSet<UserSkill> UserSkills { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -385,7 +388,7 @@ namespace Data.Context
                     .IsUnicode(false)
                     .HasColumnName("MISSION_TYPE");
 
-                entity.Property(e => e.OrganizationName)
+                entity.Property(e => e.Organization)
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("ORGANIZATION_NAME");
@@ -777,6 +780,42 @@ namespace Data.Context
                     .HasColumnName("UPDATEDATE");
 
                 entity.Property(e => e.Whyivolunteer).HasColumnName("WHYIVOLUNTEER");
+            });
+
+            modelBuilder.Entity<UserSkill>(entity =>
+            {
+                entity.ToTable("USER_SKILL");
+
+                entity.Property(e => e.UserSkillId).HasColumnName("USER_SKILL_ID");
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("CREATED_AT")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DeletedAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("DELETED_AT");
+
+                entity.Property(e => e.userId).HasColumnName("USER_ID");
+
+                entity.Property(e => e.SkillId).HasColumnName("SKILL_ID");
+
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime")
+                    .HasColumnName("UPDATED_AT");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserSkills)
+                    .HasForeignKey(d => d.userId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__USER_S__MISSI__693CA210");
+
+                entity.HasOne(d => d.Skill)
+                    .WithMany(p => p.UserSkills)
+                    .HasForeignKey(d => d.SkillId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__USER_S__SKILL__6A30C649");
             });
 
             OnModelCreatingPartial(modelBuilder);

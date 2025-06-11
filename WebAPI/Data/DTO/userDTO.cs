@@ -40,5 +40,6 @@ namespace WebAPI.Data.DTO
         public string? Availablity { get; set; }
         public string? manager { get; set; }
         public string? Role { get; set; }
+        public List<skillDTO> skills { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    partial class DefaultContextModelSnapshot : ModelSnapshot
+    [Migration("20240603114932_AddedUserSKillTable")]
+    partial class AddedUserSKillTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -997,46 +999,6 @@ namespace WebAPI.Migrations
                     b.ToTable("USER", (string)null);
                 });
 
-            modelBuilder.Entity("WebAPI.Data.Models.UserSkill", b =>
-                {
-                    b.Property<long>("UserSkillId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("USER_SKILL_ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserSkillId"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasColumnName("CREATED_AT")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("DELETED_AT");
-
-                    b.Property<long>("SkillId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("SKILL_ID");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("UPDATED_AT");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int")
-                        .HasColumnName("USER_ID");
-
-                    b.HasKey("UserSkillId");
-
-                    b.HasIndex("SkillId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("USER_SKILL", (string)null);
-                });
-
             modelBuilder.Entity("Data.Models.City", b =>
                 {
                     b.HasOne("Data.Models.Country", "Country")
@@ -1240,25 +1202,6 @@ namespace WebAPI.Migrations
                     b.Navigation("Story");
                 });
 
-            modelBuilder.Entity("WebAPI.Data.Models.UserSkill", b =>
-                {
-                    b.HasOne("Data.Models.Skill", "Skill")
-                        .WithMany("UserSkills")
-                        .HasForeignKey("SkillId")
-                        .IsRequired()
-                        .HasConstraintName("FK__USER_S__SKILL__6A30C649");
-
-                    b.HasOne("Data.Models.User", "User")
-                        .WithMany("UserSkills")
-                        .HasForeignKey("userId")
-                        .IsRequired()
-                        .HasConstraintName("FK__USER_S__MISSI__693CA210");
-
-                    b.Navigation("Skill");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Data.Models.City", b =>
                 {
                     b.Navigation("Missions");
@@ -1298,8 +1241,6 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("Data.Models.Skill", b =>
                 {
                     b.Navigation("MissionSkills");
-
-                    b.Navigation("UserSkills");
                 });
 
             modelBuilder.Entity("Data.Models.Story", b =>
@@ -1322,8 +1263,6 @@ namespace WebAPI.Migrations
                     b.Navigation("ResetPasswords");
 
                     b.Navigation("Stories");
-
-                    b.Navigation("UserSkills");
                 });
 #pragma warning restore 612, 618
         }

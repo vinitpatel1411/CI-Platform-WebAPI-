@@ -7,9 +7,13 @@ using System.Text;
 using WebAPI.Mapper;
 using WebAPI.Repositories.CommonRepositories;
 using WebAPI.Repositories.MissionRepositories;
+using WebAPI.Repositories.MissionThemeRepositories;
+using WebAPI.Repositories.SkillRepositories;
 using WebAPI.Repositories.UserRepositories;
 using WebAPI.Services.CommonServices;
 using WebAPI.Services.MissionServices;
+using WebAPI.Services.MissionThemeServices;
+using WebAPI.Services.SkillServices;
 using WebAPI.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +37,12 @@ builder.Services.AddScoped<IMissionRepository,MissionRepository>();
 
 builder.Services.AddScoped<ICommonService, CommonService>();
 builder.Services.AddScoped<ICommonRepository, CommonRepository>();
+
+builder.Services.AddScoped<IMissionThemeService, MissionThemeService>();
+builder.Services.AddScoped<IMissionThemesRepository, MissionThemeRepository>();
+
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<ISkillService, SkillService>();
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

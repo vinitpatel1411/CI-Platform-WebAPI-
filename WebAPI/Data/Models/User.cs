@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebAPI.Data.Models;
 
 namespace Data.Models
 {
@@ -13,6 +14,7 @@ namespace Data.Models
             MissionRatings = new HashSet<MissionRating>();
             ResetPasswords = new HashSet<ResetPassword>();
             Stories = new HashSet<Story>();
+            UserSkills = new HashSet<UserSkill>();
         }
 
         public int Id { get; set; }
@@ -44,5 +46,7 @@ namespace Data.Models
         public virtual ICollection<MissionRating> MissionRatings { get; set; }
         public virtual ICollection<ResetPassword> ResetPasswords { get; set; }
         public virtual ICollection<Story> Stories { get; set; }
+
+        public virtual ICollection<UserSkill> UserSkills { get; set; }
     }
 }

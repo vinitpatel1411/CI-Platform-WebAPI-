@@ -74,7 +74,7 @@ namespace WebAPI.Repositories.MissionRepositories
                     ThemeId = m.ThemeId,
                     Title = m.Title,
                     ShortDescription = m.ShortDescription,
-                    OrganizationName = m.OrganizationName,
+                    OrganizationName = m.Organization,
                     Rating = m.MissionRatings.Any() ? (int)m.MissionRatings.Average(r => r.Rating) : 0,
                     MissionType = m.MissionType,
                     GoalValue = m.GoalMissions.Count > 0 ? Convert.ToInt32(m.GoalMissions.FirstOrDefault().GoalValue) : 0,
@@ -234,7 +234,7 @@ namespace WebAPI.Repositories.MissionRepositories
                                Title = m.Title,
                                ShortDescription = m.ShortDescription,
                                Description = m.Description,
-                               OrganizationName = m.OrganizationName,
+                               OrganizationName = m.Organization,
                                UserRating = missionRating != null ? missionRating.Rating ?? 0 : 0,
                                Rating = (m.MissionRatings != null && m.MissionRatings.Count > 0) ? (int)m.MissionRatings.Where(x => x.MissionId == missionId).Average(x => x.Rating) : 0,
                                CountOfUsersRated = (m.MissionRatings != null) ? m.MissionRatings.Count(x => x.MissionId == missionId) : (int)0,
@@ -365,6 +365,126 @@ namespace WebAPI.Repositories.MissionRepositories
                 .Any(x => x.UserId == userId && x.MissionId == missionId);
 
             return isAlreadyApplied;
+        }
+
+        public Mission GetMissionFromId(long missionId)
+        {
+            return _context.Missions.Where(m => m.MissionId == missionId).FirstOrDefault();
+        }
+
+        public void AddMission(Mission mission)
+        {
+            _context.Missions.Add(mission);
+            _context.SaveChanges();
+        }
+
+        public void UpdateMission(Mission mission)
+        {
+            _context.Missions.Update(mission);
+            _context.SaveChanges();
+        }
+
+        public List<missionSkillDTO> GetMissionSkills()
+        {
+            var missionSkillsDTO = new List<missionSkillDTO>();
+            var missionSkills = _context.MissionSkills.Include(ms =>ms.Skill).ToList();
+
+            if(missionSkills.Count > 0 ) 
+            {
+                missionSkillsDTO = missionSkills.GroupBy(ms => ms.MissionId).
+                    Select(group => new missionSkillDTO
+                    {
+                        missionId = group.Key,
+                        skills = group.Select(ms => new skillDTO
+                        {
+                            skillId = ms.SkillId,
+                            skillName = ms.Skill.SkillName
+                        }).ToList()
+                    }).ToList();
+            }
+
+            return missionSkillsDTO;
+        }
+
+        public List<skillDTO> GetSkills()
+        {
+            var skills = (from t in _context.Skills
+                          where t.Status == true
+                         select new skillDTO
+                         {
+                             skillId = t.SkillId,
+                             skillName = t.SkillName
+                         }).ToList();
+
+            return skills;
+        }
+
+        public void AddMissionSkills(List<MissionSkill> missionSkills)
+        {
+            _context.MissionSkills.AddRange(missionSkills);
+            _context.SaveChanges();
+        }
+
+        public void UpdateMissionSkills(List<MissionSkill> missionSkills)
+        {
+            if(missionSkills == null || missionSkills.Count == 0)
+                return;
+
+            var existingMissionSkills = _context.MissionSkills.Where(ms => ms.MissionId == missionSkills.First().MissionId);
+
+            _context.MissionSkills.RemoveRange(existingMissionSkills);
+
+            foreach(var missionSkill in missionSkills)
+            {
+                missionSkill.CreatedAt = DateTime.Now;
+                _context.MissionSkills.Add(missionSkill);
+            }
+            _context.SaveChanges();
+        }
+
+        public List<missionDTO> GetMissionList()
+        {
+            var missionCards = _context.Missions
+                .Where(m => m.DeletedAt == null)
+                .Select(m => new missionDTO
+                {
+                    id = m.MissionId,
+                    title = m.Title,
+                    organization = m.Organization,
+                    shortDescription = m.ShortDescription,
+                    description = m.Description,
+                    startDate = m.StartDate != null ? m.StartDate.Value.ToString("MM/dd/yyyy") : null,
+                    endDate = m.EndDate != null ? m.EndDate.Value.ToString("MM/dd/yyyy") : null,
+                    registrationDeadlineDate = m.RegistrationDeadlineDate != null ? m.RegistrationDeadlineDate.Value.ToString("MM/dd/yyyy") : null,
+                    cityId = m.CityId,
+                    countryId = m.CountryId,
+                    totalSeats = m.TotalSeats,
+                    themeId = m.ThemeId,
+                    availability = m.Availability != null ? m.Availability.ToLower() : null,
+                    missionType = m.MissionType 
+                }).OrderBy(x => x.id).ToList();
+
+            return missionCards;
+        }
+
+        public List<skillDTO> GetMissionSkills(long missionId)
+        {
+            return _context.MissionSkills.AsNoTracking().Where(ms => ms.MissionId == missionId).Include(ms => ms.Skill).
+                Select(us => new skillDTO
+                {
+                    skillId = us.SkillId,
+                    skillName = us.Skill.SkillName
+                }).ToList();
+        }
+
+        public void DeleteMission(long missionId) 
+        {
+            var mission = _context.Missions.Where(m => m.MissionId == missionId).FirstOrDefault();
+
+            if(mission != null)
+                _context.Missions.Remove(mission);
+
+            _context.SaveChanges();
         }
     }
 }

@@ -17,5 +17,6 @@ namespace WebAPI.Services.UserServices
         public List<userDTO> GetUsers();
         public userDTO UpdateUserStatus(userDTO userDTO);
         public void DeleteUser(userDTO userDTO);
+        public List<skillDTO> GetUserSkills(int userId);
     }
 }

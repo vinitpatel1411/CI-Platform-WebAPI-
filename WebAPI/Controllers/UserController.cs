@@ -152,5 +152,15 @@ namespace WebAPI.Controllers
                 return this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
             }
         }
+
+        [HttpGet]
+        [Route("userSkills")]
+        public ActionResult GetUserSkills(int userId)
+        {
+            var userSKills = _userService.GetUserSkills(userId);
+            return userSKills != null 
+                ? this.Ok(new ApiResponse(HttpStatusCode.OK, new List<string> { Constants.SUCCESS }, userSKills))
+                : (ActionResult)this.Ok(new ApiResponse(HttpStatusCode.InternalServerError, new List<string> { Constants.ERROR }));
+        }
     }
 }

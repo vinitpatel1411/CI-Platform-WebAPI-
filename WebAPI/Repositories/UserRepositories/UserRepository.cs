@@ -6,6 +6,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using WebAPI.Data;
 using WebAPI.Data.DTO;
+using WebAPI.Data.Models;
 using WebAPI.Repositories.CommonRepositories;
 
 namespace WebAPI.Repositories.UserRepositories
@@ -192,6 +193,50 @@ namespace WebAPI.Repositories.UserRepositories
             }
             else
                 throw new Exception("No User Found");
+        }
+
+        public List<skillDTO> GetUserSkills(int userId)
+        {
+            //List<skillDTO> skills = new List<skillDTO>();
+            //var userSkills = _context.UserSkills.Where(u => u.userId == userId).Include(us => us.Skill).ToList();
+            
+            //foreach (var skill in userSkills)
+            //{
+            //    skillDTO skillDTO = new skillDTO();
+            //    skillDTO.skillId = skill.SkillId;
+            //    skillDTO.skillName = skill.Skill.SkillName;
+
+            //    skills.Add(skillDTO);
+            //}
+            //return skills;
+
+            return _context.UserSkills.AsNoTracking().Where(us => us.userId == userId).Include(us => us.Skill)
+                .Select(us => new skillDTO
+                {
+                    skillId = us.SkillId,
+                    skillName = us.Skill.SkillName
+                }).ToList();
+        }
+
+        public void UpdateUserSkills(List<UserSkill> userSkills)
+        {
+            if (userSkills == null || userSkills.Count == 0)
+                return;
+
+            var userId = userSkills.First().userId;
+
+            // Step 1: Delete existing UserSkill records for the given userId
+            var existingUserSkills = _context.UserSkills.Where(us => us.userId == userId);
+            _context.UserSkills.RemoveRange(existingUserSkills);
+
+            // Step 2: Add the new UserSkill records
+            foreach (var userSkill in userSkills)
+            {
+                userSkill.CreatedAt = DateTime.Now;
+                _context.UserSkills.Add(userSkill);
+            }
+
+            _context.SaveChanges();
         }
     }
 }

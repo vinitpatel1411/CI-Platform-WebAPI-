@@ -1,5 +1,6 @@
 ﻿using Data.Models;
 using WebAPI.Data.DTO;
+using WebAPI.Data.Models;
 
 namespace WebAPI.Repositories.UserRepositories
 {
@@ -18,5 +19,7 @@ namespace WebAPI.Repositories.UserRepositories
         public List<User> GetUserDetails();
         public User UpdateUserStatus(userDTO userDTO);
         public void DeleteUser(userDTO userDTO);
+        public List<skillDTO> GetUserSkills(int userId);
+        public void UpdateUserSkills(List<UserSkill> userSkills);
     }
 }

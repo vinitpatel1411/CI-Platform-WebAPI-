@@ -2,6 +2,7 @@
 using Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Data.DTO;
+using WebAPI.Data.Models;
 using WebAPI.Repositories.CommonRepositories;
 using WebAPI.Repositories.UserRepositories;
 
@@ -55,8 +56,22 @@ namespace WebAPI.Services.UserServices
 
         public userDTO UpdateUserData(userDTO userDTO)
         {
+            List<UserSkill> userSkills = new List<UserSkill>();
             var user = _mapper.Map<User>(userDTO);
             var updatedUser = _userRepository.UpdateUserData(user);
+            
+            foreach (var skills in userDTO.skills)
+            {
+                var userSKill = new UserSkill
+                {
+                    SkillId = skills.skillId,
+                    userId = Convert.ToInt32(userDTO.Id),
+                    CreatedAt = DateTime.Now
+                };
+                userSkills.Add(userSKill);
+            }
+            _userRepository.UpdateUserSkills(userSkills);
+
             var updatedUserDTO = _mapper.Map<userDTO>(updatedUser);
             if(updatedUserDTO != null)
             {
@@ -68,6 +83,8 @@ namespace WebAPI.Services.UserServices
                 if (country != null)
                     updatedUserDTO.Country = String.IsNullOrEmpty(country.Name) ? string.Empty : country.Name;
             }
+            
+
             return updatedUserDTO;
         }
         public bool isEmployeeIdUnique(string employeeId)
@@ -150,6 +167,11 @@ namespace WebAPI.Services.UserServices
         public void DeleteUser(userDTO userDTO)
         {
             _userRepository.DeleteUser(userDTO);
+        }
+
+        public List<skillDTO> GetUserSkills(int userId)
+        {
+            return _userRepository.GetUserSkills(userId);
         }
     }
 }
